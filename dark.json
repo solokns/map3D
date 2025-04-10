@@ -1,0 +1,1308 @@
+{
+  "version": 8,
+  "name": "Basic",
+  "metadata": {
+    "mapbox:autocomposite": false,
+    "mapbox:type": "template",
+    "maputnik:renderer": "mbgljs",
+    "openmaptiles:version": "3.x",
+    "openmaptiles:mapbox:owner": "openmaptiles",
+    "openmaptiles:mapbox:source:url": "mapbox://openmaptiles.4qljc88t"
+  },
+  "sources": {
+    "openmaptiles": {
+      "type": "vector",
+      "tiles": ["https://api.calypso.gi.systems/worldmap/planet/{z}/{x}/{y}"],
+      "minzoom": 0,
+      "maxzoom": 14
+    }
+  },
+  "sprite": "https://solokns.github.io/map-icons/sprite",
+  "glyphs": "https://api.calypso.gi.systems/storage/worldmap/fonts/{fontstack}/{range}.pbf",
+  "layers": [
+    {
+      "id": "background",
+      "type": "background",
+      "paint": {"background-color": "rgba(35, 41, 52, 1)"}
+    },
+    {
+      "id": "boundary_1",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "boundary",
+      "minzoom": 0,
+      "filter": ["all", ["==", "admin_level", 2]],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(29, 34, 43, 1)",
+        "line-opacity": {"base": 1, "stops": [[0, 0.4], [4, 1]]},
+        "line-width": {"base": 1, "stops": [[3, 1], [5, 1.2], [12, 3]]}
+      }
+    },
+    {
+      "id": "boundary_2",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "boundary",
+      "minzoom": 0,
+      "filter": ["all", ["in", "admin_level", 3, 4]],
+      "layout": {"line-join": "round", "visibility": "visible"},
+      "paint": {
+        "line-color": "rgba(29, 34, 43, 1)",
+        "line-width": {"base": 1, "stops": [[3, 1], [5, 1.2], [12, 3]]}
+      }
+    },
+    {
+      "id": "landcover-glacier",
+      "type": "fill",
+      "source": "openmaptiles",
+      "source-layer": "landcover",
+      "filter": ["all", ["==", "subclass", "glacier"]],
+      "layout": {"visibility": "visible"},
+      "paint": {
+        "fill-color": "rgba(53, 61, 77, 1)",
+        "fill-opacity": {"base": 1, "stops": [[0, 1], [8, 1]]}
+      }
+    },
+    {
+      "id": "landuse_residential",
+      "type": "fill",
+      "source": "openmaptiles",
+      "source-layer": "landuse",
+      "maxzoom": 13,
+      "filter": ["==", "class", "residential"],
+      "layout": {"visibility": "visible"},
+      "paint": {
+        "fill-color": {
+          "base": 1,
+          "stops": [[9, "rgba(46, 54, 67, 1)"], [12, "rgba(46, 54, 67, 1)"]]
+        }
+      }
+    },
+    {
+      "id": "factory_area",
+      "type": "fill",
+      "source": "openmaptiles",
+      "source-layer": "landuse",
+      "filter": ["all", ["==", "class", "industrial"]],
+      "layout": {"visibility": "visible"},
+      "paint": {"fill-color": "rgba(28, 36, 49, 1)", "fill-opacity": 1}
+    },
+    {
+      "id": "railway_area",
+      "type": "fill",
+      "source": "openmaptiles",
+      "source-layer": "landuse",
+      "filter": ["all", ["==", "class", "railway"]],
+      "layout": {"visibility": "visible"},
+      "paint": {
+        "fill-color": "rgba(27, 33, 43, 1)",
+        "fill-opacity": {"base": 1, "stops": [[0, 1], [8, 1]]}
+      }
+    },
+    {
+      "id": "road_path",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "minzoom": 0,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        ["==", "$type", "LineString"],
+        ["in", "class", "path", "track"]
+      ],
+      "layout": {
+        "line-cap": "square",
+        "line-join": "bevel",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(42, 47, 56, 1)",
+        "line-width": {"base": 1, "stops": [[1, 0.5], [14, 1], [21, 3]]}
+      }
+    },
+    {
+      "id": "water",
+      "type": "fill",
+      "source": "openmaptiles",
+      "source-layer": "water",
+      "minzoom": 0,
+      "filter": [
+        "all",
+        ["==", "$type", "Polygon"],
+        ["!=", "intermittent", 1],
+        ["!=", "brunnel", "tunnel"]
+      ],
+      "layout": {"visibility": "visible"},
+      "paint": {"fill-color": "rgba(9, 16, 28, 1)"}
+    },
+    {
+      "id": "water_dock",
+      "type": "fill",
+      "source": "openmaptiles",
+      "source-layer": "water",
+      "filter": ["all", ["==", "class", "dock"]],
+      "layout": {"visibility": "visible"},
+      "paint": {"fill-color": "rgba(16, 27, 44, 1)"}
+    },
+    {
+      "id": "water_intermittent",
+      "type": "fill",
+      "source": "openmaptiles",
+      "source-layer": "water",
+      "filter": ["all", ["==", "$type", "Polygon"], ["==", "intermittent", 1]],
+      "layout": {"visibility": "visible"},
+      "paint": {"fill-color": "rgba(9, 16, 28, 1)", "fill-opacity": 1}
+    },
+    {
+      "id": "water_way_intermittent",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "waterway",
+      "filter": [
+        "all",
+        ["==", "$type", "LineString"],
+        ["!in", "brunnel", "tunnel", "bridge"],
+        ["==", "intermittent", 1]
+      ],
+      "layout": {"visibility": "visible"},
+      "paint": {
+        "line-color": "rgba(7, 11, 29, 1)",
+        "line-dasharray": [2, 1],
+        "line-opacity": 1,
+        "line-width": {"base": 1.4, "stops": [[8, 1], [20, 8]]}
+      }
+    },
+    {
+      "id": "water_way_canal",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "waterway",
+      "filter": ["all", ["==", "class", "canal"]],
+      "layout": {"visibility": "visible"},
+      "paint": {
+        "line-color": "rgba(19, 32, 53, 1)",
+        "line-width": {"stops": [[5, 0.5], [20, 8]], "base": 1.2}
+      }
+    },
+    {
+      "id": "water_way_river",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "waterway",
+      "filter": ["all", ["==", "class", "river"], ["!=", "brunnel", "tunnel"]],
+      "layout": {"line-cap": "round", "visibility": "visible"},
+      "paint": {
+        "line-color": "rgba(19, 32, 53, 1)",
+        "line-width": {"base": 1.2, "stops": [[5, 0.5], [20, 8]]}
+      }
+    },
+    {
+      "id": "water_line_ferry",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "filter": ["all", ["==", "class", "ferry"]],
+      "layout": {"visibility": "visible"},
+      "paint": {
+        "line-color": "rgba(33, 60, 104, 1)",
+        "line-dasharray": [3, 4],
+        "line-width": {"stops": [[6, 0.5], [12, 1]], "base": 2},
+        "line-opacity": {"stops": [[6, 0.7], [12, 1]]}
+      }
+    },
+    {
+      "id": "aeroway_fill",
+      "type": "fill",
+      "source": "openmaptiles",
+      "source-layer": "aeroway",
+      "minzoom": 6,
+      "filter": ["==", "$type", "Polygon"],
+      "layout": {"visibility": "visible"},
+      "paint": {"fill-color": "rgba(36, 34, 44, 1)", "fill-opacity": 0.7}
+    },
+    {
+      "id": "aeroway-area",
+      "type": "fill",
+      "metadata": {"mapbox:group": "1444849345966.4436"},
+      "source": "openmaptiles",
+      "source-layer": "aeroway",
+      "minzoom": 4,
+      "filter": [
+        "all",
+        ["==", "$type", "Polygon"],
+        ["in", "class", "runway", "taxiway"]
+      ],
+      "layout": {"visibility": "visible"},
+      "paint": {
+        "fill-color": "rgba(52, 50, 63, 1)",
+        "fill-opacity": {"base": 1, "stops": [[13, 0], [14, 1]]}
+      }
+    },
+    {
+      "id": "road_bridge_area",
+      "type": "fill",
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "filter": [
+        "all",
+        ["==", "$type", "Polygon"],
+        ["in", "brunnel", "bridge"]
+      ],
+      "layout": {"visibility": "visible"},
+      "paint": {"fill-color": "rgba(35, 41, 52, 1)", "fill-opacity": 0.5}
+    },
+    {
+      "id": "road_area_pier",
+      "type": "fill",
+      "metadata": {},
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "filter": ["all", ["==", "$type", "Polygon"], ["==", "class", "pier"]],
+      "layout": {"visibility": "visible"},
+      "paint": {"fill-antialias": true, "fill-color": "rgba(24, 40, 67, 1)"}
+    },
+    {
+      "id": "road_pier",
+      "type": "line",
+      "metadata": {},
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "filter": ["all", ["==", "$type", "LineString"], ["in", "class", "pier"]],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(24, 40, 67, 1)",
+        "line-width": {"base": 1.2, "stops": [[15, 1], [17, 4]]}
+      }
+    },
+    {
+      "id": "building ",
+      "type": "fill",
+      "source": "openmaptiles",
+      "source-layer": "building",
+      "minzoom": 0,
+      "maxzoom": 24,
+      "filter": ["all"],
+      "layout": {"visibility": "visible"},
+      "paint": {
+        "fill-antialias": true,
+        "fill-color": "rgba(51, 59, 74, 1)",
+        "fill-opacity": 1,
+        "fill-outline-color": "rgba(212, 177, 146, 0)"
+      }
+    },
+    {
+      "id": "building_3d",
+      "type": "fill-extrusion",
+      "source": "openmaptiles",
+      "source-layer": "building",
+      "minzoom": 0,
+      "maxzoom": 24,
+      "layout": {"visibility": "visible"},
+      "paint": {
+        "fill-extrusion-color": "rgba(31, 36, 46, 1)",
+        "fill-extrusion-height": {
+          "property": "render_height",
+          "type": "identity"
+        },
+        "fill-extrusion-base": {
+          "property": "render_min_height",
+          "type": "identity"
+        },
+        "fill-extrusion-opacity": 0.8
+      }
+    },
+    {
+      "id": "water_name_line",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "waterway",
+      "minzoom": 0,
+      "filter": ["all", ["==", "$type", "LineString"]],
+      "layout": {
+        "text-field": "{name}",
+        "text-font": ["Inter-Regular"],
+        "text-max-width": 5,
+        "symbol-placement": "line",
+        "visibility": "visible",
+        "text-rotation-alignment": "auto",
+        "text-size": {"base": 1, "stops": [[12, 11], [14, 12]]}
+      },
+      "paint": {
+        "text-color": "rgba(87, 108, 140, 1)",
+        "text-halo-color": "rgba(7, 10, 16, 1)",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "road_service_track",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "filter": [
+        "all",
+        ["!in", "brunnel", "bridge", "tunnel"],
+        ["in", "class", "service", "track"]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(51, 57, 67, 1)",
+        "line-width": {"stops": [[13, 1], [16, 5], [21, 15]], "base": 2}
+      }
+    },
+    {
+      "id": "road_secondary_tertiary",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "minzoom": 3,
+      "filter": [
+        "all",
+        ["==", "$type", "LineString"],
+        ["in", "class", "secondary", "tertiary"]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(54, 61, 71, 1)",
+        "line-width": {"base": 1.4, "stops": [[8, 1], [20, 20]]}
+      }
+    },
+    {
+      "id": "road_minor",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "filter": [
+        "all",
+        ["==", "$type", "LineString"],
+        ["!in", "brunnel", "bridge", "tunnel"],
+        ["in", "class", "minor"]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(54, 61, 71, 1)",
+        "line-width": {"base": 1.2, "stops": [[13.5, 0], [14, 2.5], [20, 18]]}
+      }
+    },
+    {
+      "id": "road_trunk_primary",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "minzoom": 0,
+      "filter": [
+        "all",
+        ["==", "$type", "LineString"],
+        ["in", "class", "trunk", "primary"]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(67, 75, 87, 1)",
+        "line-width": {"base": 1.4, "stops": [[1, 1], [20, 24]]}
+      }
+    },
+    {
+      "id": "road_major_motorway",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "minzoom": 5,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        ["==", "$type", "LineString"],
+        ["==", "class", "motorway"]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(60, 68, 79, 1)",
+        "line-offset": 0,
+        "line-width": {"base": 1.4, "stops": [[8, 1], [16, 10]]}
+      }
+    },
+    {
+      "id": "aeroway-taxiway",
+      "type": "line",
+      "metadata": {"mapbox:group": "1444849345966.4436"},
+      "source": "openmaptiles",
+      "source-layer": "aeroway",
+      "minzoom": 12,
+      "filter": [
+        "all",
+        ["in", "class", "taxiway"],
+        ["==", "$type", "LineString"]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(66, 63, 80, 1)",
+        "line-opacity": 1,
+        "line-width": {"base": 1.5, "stops": [[12, 1], [17, 10]]}
+      }
+    },
+    {
+      "id": "aeroway-runway",
+      "type": "line",
+      "metadata": {"mapbox:group": "1444849345966.4436"},
+      "source": "openmaptiles",
+      "source-layer": "aeroway",
+      "minzoom": 4,
+      "filter": [
+        "all",
+        ["in", "class", "runway"],
+        ["==", "$type", "LineString"]
+      ],
+      "layout": {
+        "line-cap": "round",
+        "line-join": "round",
+        "visibility": "visible"
+      },
+      "paint": {
+        "line-color": "rgba(61, 58, 73, 1)",
+        "line-opacity": 1,
+        "line-width": {"base": 1.5, "stops": [[11, 4], [17, 50]]}
+      }
+    },
+    {
+      "id": "aeroway-label",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "aerodrome_label",
+      "minzoom": 10,
+      "filter": ["all", ["has", "iata"]],
+      "layout": {
+        "icon-size": 1,
+        "text-anchor": "top",
+        "text-field": "{name:ru}",
+        "text-font": ["Noto Sans Regular"],
+        "text-max-width": 8,
+        "text-size": 11,
+        "visibility": "visible",
+        "text-rotation-alignment": "viewport",
+        "text-offset": [0, 1],
+        "icon-image": "aeroway"
+      },
+      "paint": {
+        "text-color": "rgba(159, 156, 174, 1)",
+        "text-halo-blur": 1,
+        "text-halo-width": 1,
+        "text-halo-color": "rgba(41, 39, 51, 1)",
+        "icon-color": "rgba(220, 229, 243, 1)",
+        "icon-halo-color": "rgba(7, 11, 29, 1)"
+      }
+    },
+    {
+      "id": "tram_transit",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "minzoom": 0,
+      "maxzoom": 0,
+      "filter": [
+        "all",
+        ["==", "$type", "LineString"],
+        ["all", ["==", "class", "transit"], ["!in", "brunnel", "tunnel"]]
+      ],
+      "layout": {"line-join": "round", "visibility": "visible"},
+      "paint": {
+        "line-color": "rgba(41, 50, 63, 1)",
+        "line-width": {"stops": [[10.5, 2], [13.5, 2]]},
+        "line-offset": {"stops": [[6, 0], [10, 0]]}
+      }
+    },
+    {
+      "id": "tram_hatching",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "filter": [
+        "all",
+        ["!in", "brunnel", "bridge", "tunnel"],
+        ["==", "class", "transit"]
+      ],
+      "layout": {"visibility": "visible"},
+      "paint": {
+        "line-color": "rgba(41, 50, 63, 1)",
+        "line-dasharray": [0.2, 6],
+        "line-width": {"base": 1.4, "stops": [[14.5, 0], [15, 3], [20, 8]]}
+      }
+    },
+    {
+      "id": "tram_bridge",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "filter": [
+        "all",
+        ["==", "class", "transit"],
+        ["==", "brunnel", "bridge"]
+      ],
+      "layout": {"visibility": "visible"},
+      "paint": {
+        "line-color": "rgba(41, 50, 63, 1)",
+        "line-dasharray": [0.2, 8],
+        "line-width": {"base": 1.4, "stops": [[14.5, 0], [15, 3], [20, 8]]}
+      }
+    },
+    {
+      "id": "railway_minor_dashline",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "minzoom": 0,
+      "filter": [
+        "all",
+        ["==", "$type", "LineString"],
+        ["all", ["==", "class", "rail"], ["has", "service"]]
+      ],
+      "layout": {"line-join": "round", "visibility": "none"},
+      "paint": {
+        "line-color": "rgba(72, 89, 114, 1)",
+        "line-dasharray": [2, 3],
+        "line-width": {
+          "property": "",
+          "type": "exponential",
+          "stops": [
+            [{"value": 0, "zoom": 10.5}, 1],
+            [{"value": 0, "zoom": 13.5}, 4]
+          ],
+          "base": 1
+        },
+        "line-offset": 0
+      }
+    },
+    {
+      "id": "railway_dashline",
+      "type": "line",
+      "metadata": {"mapbox:group": "b6371a3f2f5a9932464fa3867530a2e5"},
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "minzoom": 0,
+      "filter": ["all", ["==", "$type", "LineString"], ["==", "class", "rail"]],
+      "layout": {"line-join": "round", "visibility": "visible"},
+      "paint": {
+        "line-color": "rgba(72, 89, 114, 1)",
+        "line-dasharray": [2, 3],
+        "line-width": {
+          "property": "",
+          "type": "exponential",
+          "stops": [
+            [{"value": 0, "zoom": 10.5}, 1],
+            [{"value": 0, "zoom": 13.5}, 4]
+          ],
+          "base": 1.3
+        }
+      }
+    },
+    {
+      "id": "railway_hatching",
+      "type": "line",
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "filter": [
+        "all",
+        ["!in", "brunnel", "bridge", "tunnel"],
+        ["==", "class", "rail"]
+      ],
+      "layout": {"visibility": "visible"},
+      "paint": {
+        "line-color": "rgba(75, 92, 118, 1)",
+        "line-dasharray": [0.2, 8],
+        "line-width": {"base": 1.4, "stops": [[14.5, 0], [15, 3], [20, 8]]}
+      }
+    },
+    {
+      "id": "roadname_major_label",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "transportation_name",
+      "minzoom": 11,
+      "maxzoom": 24,
+      "filter": ["all", ["==", "$type", "LineString"], ["!in", "class", ""]],
+      "layout": {
+        "symbol-placement": "line",
+        "text-field": "{name}",
+        "text-font": ["Inter-Regular"],
+        "text-letter-spacing": 0.1,
+        "text-rotation-alignment": "auto",
+        "text-size": {"stops": [[10, 8], [20, 14]], "base": 1.4},
+        "text-transform": "none",
+        "visibility": "visible",
+        "text-justify": "center"
+      },
+      "paint": {
+        "text-color": "rgba(206, 212, 222, 1)",
+        "text-halo-width": 2,
+        "text-halo-color": "rgba(26, 31, 40, 1)",
+        "icon-color": "rgba(230, 8, 12, 1)",
+        "icon-halo-color": "rgba(7, 11, 29, 1)"
+      }
+    },
+    {
+      "id": "roadname_arrow",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "transportation",
+      "minzoom": 11,
+      "filter": ["==", "oneway", 1],
+      "layout": {
+        "symbol-placement": "line",
+        "visibility": "visible",
+        "text-font": ["Inter-Regular"],
+        "icon-rotate": 90,
+        "icon-size": 0.8,
+        "icon-image": "arrow"
+      },
+      "paint": {"icon-color": "rgba(0, 0, 0, 1)", "icon-opacity": 0.8}
+    },
+    {
+      "id": "poi_label",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "poi",
+      "minzoom": 0,
+      "maxzoom": 16,
+      "filter": ["all", ["==", "$type", "Point"], ["==", "rank", 1]],
+      "layout": {
+        "icon-size": 1,
+        "text-anchor": "top",
+        "text-field": "{name:ru}",
+        "text-font": ["Inter-Regular"],
+        "text-max-width": 8,
+        "text-offset": [0, 0.5],
+        "text-size": 10,
+        "visibility": "visible",
+        "text-rotation-alignment": "viewport"
+      },
+      "paint": {
+        "text-color": "rgba(131, 141, 158, 1)",
+        "text-halo-blur": 1,
+        "text-halo-width": 2,
+        "icon-halo-color": "rgba(255, 0, 208, 1)",
+        "text-halo-color": "rgba(26, 31, 40, 1)",
+        "icon-color": "rgba(22, 255, 0, 1)"
+      }
+    },
+    {
+      "id": "village_label_other",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 5,
+      "maxzoom": 24,
+      "filter": ["all", ["==", "$type", "Point"], ["==", "class", "village"]],
+      "layout": {
+        "text-anchor": "top",
+        "text-field": "{name:ru}",
+        "text-font": ["Inter-Regular"],
+        "text-size": 12,
+        "visibility": "visible",
+        "text-rotation-alignment": "viewport",
+        "icon-image": "point_fill",
+        "icon-size": 0.3,
+        "text-offset": [0, 0.4]
+      },
+      "paint": {
+        "text-color": "rgba(131, 141, 158, 1)",
+        "text-halo-blur": 0,
+        "text-halo-color": "rgba(26, 31, 40, 1)",
+        "text-halo-width": 2,
+        "icon-color": "rgba(238, 242, 250, 1)",
+        "icon-halo-color": "rgba(7, 11, 29, 1)",
+        "icon-opacity": 0.5
+      }
+    },
+    {
+      "id": "village_label_new-port",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 0,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        ["==", "$type", "Point"],
+        ["==", "class", "village"],
+        ["==", "name", "Новый Порт"]
+      ],
+      "layout": {
+        "text-anchor": "top",
+        "text-field": "{name:ru}",
+        "text-font": ["Inter-Bold"],
+        "text-size": 12,
+        "visibility": "visible",
+        "text-rotation-alignment": "viewport",
+        "icon-size": 1,
+        "text-offset": [0, 1],
+        "icon-image": "at"
+      },
+      "paint": {
+        "text-color": "rgba(238, 242, 250, 1)",
+        "text-halo-blur": 0,
+        "text-halo-color": "rgba(24, 29, 37, 1)",
+        "text-halo-width": 2,
+        "icon-color": "rgba(238, 242, 250, 1)",
+        "icon-halo-color": "rgba(7, 11, 29, 1)"
+      }
+    },
+    {
+      "id": "city_label_koz",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 0,
+      "maxzoom": 24,
+      "filter": ["all", ["==", "$type", "Point"], ["==", "name", "Козьмино"]],
+      "layout": {
+        "text-anchor": "top",
+        "text-field": "{name:ru}",
+        "text-font": ["Inter-Bold"],
+        "text-size": 12,
+        "visibility": "visible",
+        "text-rotation-alignment": "viewport",
+        "icon-size": 1,
+        "text-offset": [0, 1],
+        "icon-image": "port"
+      },
+      "paint": {
+        "text-color": "rgba(238, 242, 250, 1)",
+        "text-halo-blur": 0,
+        "text-halo-color": "rgba(24, 29, 37, 1)",
+        "text-halo-width": 2,
+        "icon-color": "rgba(238, 242, 250, 1)",
+        "icon-halo-color": "rgba(7, 11, 29, 1)"
+      }
+    },
+    {
+      "id": "city_label_nov",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 0,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        ["==", "$type", "Point"],
+        ["==", "name", "Новороссийск"]
+      ],
+      "layout": {
+        "text-anchor": "top",
+        "text-field": "{name:ru}",
+        "text-font": ["Inter-Bold"],
+        "text-size": 12,
+        "visibility": "visible",
+        "text-rotation-alignment": "viewport",
+        "icon-size": 1,
+        "text-offset": [0, 1],
+        "icon-image": "port"
+      },
+      "paint": {
+        "text-color": "rgba(238, 242, 250, 1)",
+        "text-halo-blur": 0,
+        "text-halo-color": "rgba(24, 29, 37, 1)",
+        "text-halo-width": 2,
+        "icon-color": "rgba(238, 242, 250, 1)",
+        "icon-halo-color": "rgba(7, 11, 29, 1)"
+      }
+    },
+    {
+      "id": "city_label_ust-lug",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 0,
+      "maxzoom": 24,
+      "filter": ["all", ["==", "$type", "Point"], ["==", "name", "Усть-Луга"]],
+      "layout": {
+        "text-anchor": "top",
+        "text-field": "{name:ru}",
+        "text-font": ["Inter-Bold"],
+        "text-size": 12,
+        "visibility": "visible",
+        "text-rotation-alignment": "viewport",
+        "icon-size": 1,
+        "text-offset": [0, 1],
+        "icon-image": "port"
+      },
+      "paint": {
+        "text-color": "rgba(238, 242, 250, 1)",
+        "text-halo-blur": 0,
+        "text-halo-color": "rgba(24, 29, 37, 1)",
+        "text-halo-width": 2,
+        "icon-color": "rgba(238, 242, 250, 1)",
+        "icon-halo-color": "rgba(7, 11, 29, 1)"
+      }
+    },
+    {
+      "id": "city_label_prim",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 0,
+      "maxzoom": 17,
+      "filter": ["all", ["==", "$type", "Point"], ["==", "name", "Приморск"]],
+      "layout": {
+        "text-anchor": "top",
+        "text-field": "{name:ru}",
+        "text-font": ["Inter-Bold"],
+        "text-size": 12,
+        "visibility": "visible",
+        "text-rotation-alignment": "viewport",
+        "icon-size": 1,
+        "text-offset": [0, 1],
+        "icon-image": "port"
+      },
+      "paint": {
+        "text-color": "rgba(238, 242, 250, 1)",
+        "text-halo-blur": 0,
+        "text-halo-color": "rgba(24, 29, 37, 1)",
+        "text-halo-width": 2,
+        "icon-color": "rgba(238, 242, 250, 1)",
+        "icon-halo-color": "rgba(7, 11, 29, 1)"
+      }
+    },
+    {
+      "id": "city_label_mur",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 0,
+      "maxzoom": 18,
+      "filter": [
+        "all",
+        ["==", "$type", "Point"],
+        ["==", "class", "city"],
+        ["==", "name", "Мурманск"]
+      ],
+      "layout": {
+        "text-anchor": "top",
+        "text-field": "{name:ru}",
+        "text-font": ["Inter-Bold"],
+        "text-size": 12,
+        "visibility": "visible",
+        "text-rotation-alignment": "viewport",
+        "icon-size": 1,
+        "text-offset": [0, 1],
+        "icon-image": "umba"
+      },
+      "paint": {
+        "text-color": "rgba(238, 242, 250, 1)",
+        "text-halo-blur": 0,
+        "text-halo-color": "rgba(24, 29, 37, 1)",
+        "text-halo-width": 2,
+        "icon-color": "rgba(238, 242, 250, 1)",
+        "icon-halo-color": "rgba(7, 11, 29, 1)"
+      }
+    },
+    {
+      "id": "city_label_spb",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 0,
+      "maxzoom": 18,
+      "filter": [
+        "all",
+        ["==", "$type", "Point"],
+        ["==", "class", "city"],
+        ["==", "name", "Санкт-Петербург"]
+      ],
+      "layout": {
+        "text-anchor": "top",
+        "text-field": "{name:ru}",
+        "text-font": ["Inter-Bold"],
+        "text-size": 12,
+        "visibility": "visible",
+        "text-rotation-alignment": "viewport",
+        "icon-size": 1,
+        "text-offset": [0, 1],
+        "icon-image": "port"
+      },
+      "paint": {
+        "text-color": "rgba(238, 242, 250, 1)",
+        "text-halo-blur": 0,
+        "text-halo-color": "rgba(24, 29, 37, 1)",
+        "text-halo-width": 2,
+        "icon-color": "rgba(238, 242, 250, 1)",
+        "icon-halo-color": "rgba(7, 11, 29, 1)"
+      }
+    },
+    {
+      "id": "city_label_oms",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 0,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        ["==", "$type", "Point"],
+        ["==", "class", "city"],
+        ["==", "name", "Омск"]
+      ],
+      "layout": {
+        "text-anchor": "top",
+        "text-field": "{name:ru}",
+        "text-font": ["Inter-Bold"],
+        "text-size": 12,
+        "visibility": "visible",
+        "text-rotation-alignment": "viewport",
+        "icon-size": 1,
+        "text-offset": [0, 1],
+        "icon-image": "factory"
+      },
+      "paint": {
+        "text-color": "rgba(238, 242, 250, 1)",
+        "text-halo-blur": 0,
+        "text-halo-color": "rgba(24, 29, 37, 1)",
+        "text-halo-width": 2,
+        "icon-color": "rgba(238, 242, 250, 1)",
+        "icon-halo-color": "rgba(7, 11, 29, 1)"
+      }
+    },
+    {
+      "id": "city_label_yar",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 0,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        ["==", "$type", "Point"],
+        ["==", "class", "city"],
+        ["==", "name", "Ярославль"]
+      ],
+      "layout": {
+        "text-anchor": "top",
+        "text-field": "{name:ru}",
+        "text-font": ["Inter-Bold"],
+        "text-size": 12,
+        "visibility": "visible",
+        "text-rotation-alignment": "viewport",
+        "icon-size": 1,
+        "text-offset": [0, 1],
+        "icon-image": "factory"
+      },
+      "paint": {
+        "text-color": "rgba(238, 242, 250, 1)",
+        "text-halo-blur": 0,
+        "text-halo-color": "rgba(24, 29, 37, 1)",
+        "text-halo-width": 2,
+        "icon-color": "rgba(238, 242, 250, 1)",
+        "icon-halo-color": "rgba(7, 11, 29, 1)"
+      }
+    },
+    {
+      "id": "city_label_other",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 5,
+      "maxzoom": 18,
+      "filter": [
+        "all",
+        ["==", "$type", "Point"],
+        ["==", "class", "city"],
+        ["!=", "name", "Санкт-Петербург"],
+        ["!=", "name", "Ярославль"],
+        ["!=", "name", "Омск"],
+        ["!=", "name", "Мурманск"],
+        ["!=", "name", "Новороссийск"],
+        ["!=", "name", "Козьмино"]
+      ],
+      "layout": {
+        "text-anchor": "top",
+        "text-field": "{name:ru}",
+        "text-font": ["Inter-Regular"],
+        "text-max-width": 6,
+        "text-size": 12,
+        "visibility": "visible",
+        "text-rotation-alignment": "viewport",
+        "text-offset": [0, 0.4],
+        "icon-image": "point_fill",
+        "icon-size": 0.4
+      },
+      "paint": {
+        "text-color": "rgba(194, 201, 212, 1)",
+        "text-halo-blur": 0,
+        "text-halo-color": "rgba(29, 34, 43, 1)",
+        "text-halo-width": 2,
+        "icon-color": "rgba(220, 229, 243, 1)",
+        "icon-halo-color": "rgba(7, 11, 29, 1)"
+      }
+    },
+    {
+      "id": "capital_mos",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 0,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        ["==", "$type", "Point"],
+        ["==", "class", "city"],
+        ["in", "capital", 2],
+        ["==", "name", "Москва"]
+      ],
+      "layout": {
+        "text-field": "{name:ru}",
+        "text-font": ["Inter-Bold"],
+        "text-max-width": 10,
+        "text-size": {"stops": [[3, 12], [8, 14]]},
+        "visibility": "visible",
+        "text-rotation-alignment": "viewport",
+        "text-justify": "center",
+        "text-offset": [0, 1],
+        "icon-anchor": "center",
+        "icon-size": 1,
+        "text-anchor": "top",
+        "icon-image": "factory"
+      },
+      "paint": {
+        "text-color": "rgba(238, 242, 250, 1)",
+        "text-halo-blur": 0,
+        "text-halo-width": 2,
+        "icon-color": "rgba(0, 97, 255, 1)",
+        "text-halo-color": "rgba(24, 29, 37, 1)",
+        "icon-halo-color": "rgba(7, 11, 29, 1)"
+      }
+    },
+    {
+      "id": "capital_label_city",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 5,
+      "maxzoom": 24,
+      "filter": [
+        "all",
+        ["==", "$type", "Point"],
+        ["==", "class", "city"],
+        ["in", "capital", 2],
+        ["!=", "name", "Москва"]
+      ],
+      "layout": {
+        "text-field": "{name:ru}",
+        "text-font": ["Inter-Regular"],
+        "text-max-width": 10,
+        "text-size": {"stops": [[3, 12], [8, 14]]},
+        "visibility": "visible",
+        "text-rotation-alignment": "viewport",
+        "text-justify": "auto",
+        "icon-size": 0.5,
+        "icon-anchor": "center",
+        "icon-image": "point_stroke_blue",
+        "text-offset": [0, 1]
+      },
+      "paint": {
+        "text-color": "rgba(238, 242, 250, 1)",
+        "text-halo-blur": 0,
+        "text-halo-width": 2,
+        "icon-color": "rgba(0, 97, 255, 1)",
+        "text-halo-color": "rgba(24, 29, 37, 1)",
+        "icon-halo-color": "rgba(7, 11, 29, 1)"
+      }
+    },
+    {
+      "id": "railway_station",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "poi",
+      "minzoom": 0,
+      "maxzoom": 24,
+      "filter": ["all", ["==", "subclass", "station"]],
+      "layout": {
+        "text-anchor": "top",
+        "text-field": "{name}",
+        "text-font": ["Inter-Regular"],
+        "text-max-width": 9,
+        "text-size": 12,
+        "text-rotation-alignment": "auto",
+        "icon-anchor": "center",
+        "icon-rotate": 0,
+        "text-offset": [0, 0.8],
+        "visibility": "visible",
+        "icon-size": 0.9,
+        "icon-image": "Railway_station"
+      },
+      "paint": {
+        "text-color": "rgba(141, 154, 176, 1)",
+        "text-halo-blur": 0.5,
+        "text-halo-color": "rgba(32, 39, 49, 1)",
+        "text-halo-width": 1
+      }
+    },
+    {
+      "id": "watername_sea",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "water_name",
+      "minzoom": 4,
+      "filter": ["all", ["==", "class", "sea"]],
+      "layout": {
+        "text-font": ["Inter-Regular"],
+        "text-size": {"stops": [[4, 10], [6, 12], [11, 14]]},
+        "text-field": "{name:ru}",
+        "text-rotation-alignment": "viewport",
+        "visibility": "visible",
+        "text-justify": "center",
+        "text-anchor": "center",
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-transform": "none",
+        "text-offset": [0, 0],
+        "text-rotate": 0,
+        "text-radial-offset": 0,
+        "text-keep-upright": false,
+        "text-max-width": 5
+      },
+      "paint": {
+        "text-color": "rgba(87, 108, 140, 1)",
+        "text-halo-color": "rgba(7, 10, 16, 1)",
+        "text-opacity": 0.8
+      }
+    },
+    {
+      "id": "watername_ocean",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "water_name",
+      "filter": ["all", ["==", "class", "ocean"]],
+      "layout": {
+        "text-font": ["Inter-Regular"],
+        "text-size": {"stops": [[2, 12], [6, 10], [11, 8]]},
+        "text-field": "{name:ru}",
+        "text-rotation-alignment": "viewport",
+        "visibility": "visible",
+        "text-justify": "center",
+        "text-anchor": "center",
+        "text-allow-overlap": false,
+        "text-ignore-placement": false,
+        "text-max-width": 15,
+        "text-transform": "uppercase",
+        "text-offset": [0, 0],
+        "text-rotate": 0,
+        "text-radial-offset": 0,
+        "text-keep-upright": false,
+        "text-letter-spacing": 0.1
+      },
+      "paint": {
+        "text-color": "rgba(87, 108, 140, 1)",
+        "text-halo-color": "rgba(7, 10, 16, 1)",
+        "text-opacity": 0.5
+      }
+    },
+    {
+      "id": "country_label_ru",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 0,
+      "maxzoom": 4,
+      "filter": [
+        "all",
+        ["==", "$type", "Point"],
+        ["==", "class", "country"],
+        ["in", "rank", 1],
+        ["==", "name", "Россия"]
+      ],
+      "layout": {
+        "text-field": "{name:ru}",
+        "text-font": ["Inter-Regular"],
+        "text-max-width": 20,
+        "text-size": 16,
+        "visibility": "none",
+        "text-rotation-alignment": "viewport",
+        "text-justify": "auto",
+        "icon-size": 0.5,
+        "icon-anchor": "center",
+        "text-offset": [0, 1],
+        "text-letter-spacing": 0.6,
+        "text-transform": "uppercase"
+      },
+      "paint": {
+        "text-color": "rgba(119, 129, 147, 1)",
+        "text-halo-blur": 0,
+        "text-halo-width": 2,
+        "icon-color": "rgba(0, 97, 255, 1)",
+        "text-halo-color": "rgba(22, 27, 35, 1)",
+        "icon-halo-color": "rgba(7, 11, 29, 1)",
+        "text-opacity": 0.5
+      }
+    },
+    {
+      "id": "country_label_other",
+      "type": "symbol",
+      "source": "openmaptiles",
+      "source-layer": "place",
+      "minzoom": 0,
+      "maxzoom": 4,
+      "filter": [
+        "all",
+        ["==", "$type", "Point"],
+        ["==", "class", "country"],
+        ["in", "rank", 1, 2]
+      ],
+      "layout": {
+        "text-field": "{name:ru}",
+        "text-font": ["Inter-Regular"],
+        "text-max-width": 20,
+        "text-size": 8,
+        "visibility": "visible",
+        "text-rotation-alignment": "viewport",
+        "text-justify": "auto",
+        "icon-size": 0.5,
+        "icon-anchor": "center",
+        "text-offset": [0, 1],
+        "text-letter-spacing": 0.2,
+        "text-transform": "uppercase"
+      },
+      "paint": {
+        "text-color": "rgba(119, 129, 147, 1)",
+        "text-halo-blur": 0,
+        "text-halo-width": 2,
+        "icon-color": "rgba(0, 97, 255, 1)",
+        "text-halo-color": "rgba(22, 27, 35, 1)",
+        "icon-halo-color": "rgba(7, 11, 29, 1)",
+        "text-opacity": 0.6
+      }
+    }
+  ],
+  "id": "2j0t4ow"
+}
